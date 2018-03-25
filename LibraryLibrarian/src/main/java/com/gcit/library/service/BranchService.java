@@ -64,7 +64,6 @@ public class BranchService {
 			e.printStackTrace();
 			return new ResponseEntity<Object>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
 	}
 	
 	@Transactional

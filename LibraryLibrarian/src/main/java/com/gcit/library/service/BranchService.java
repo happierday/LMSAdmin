@@ -24,8 +24,6 @@ import com.gcit.library.model.Branch;
 @CrossOrigin(origins = "http://localhost:3000")
 public class BranchService {
 	
-	private String url = "http://localhost:8080";
-	
 	@Autowired
 	BranchDao brdao;
 	
@@ -33,13 +31,10 @@ public class BranchService {
 	BookDao bdao;
 	
 	@Transactional
-	@RequestMapping(value="/branches",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(value="/branches",method=RequestMethod.GET)
 	public ResponseEntity<Object> getAllBranch(@RequestParam(value="pageNo",required=false) Integer pageNo,
 			@RequestParam(value="search",required=false) String search){
-//		System.out.println("LIb");
-//		System.out.println("search: " + search.length());
-//		System.out.println("pageNo: " + pageNo);
-		if(search.length() == 0) search = null;
+		if(search == null || search.length() == 0) search = null;
 		StringBuffer str = new StringBuffer("select * from tbl_library_branch");
 		List<Branch> branches = null;
 		try {
@@ -73,7 +68,7 @@ public class BranchService {
 	}
 	
 	@Transactional
-	@RequestMapping(value="/branches/{branchId}",method=RequestMethod.GET,produces="application/json")
+	@RequestMapping(value="/branches/{branchId}",method=RequestMethod.GET)
 	public ResponseEntity<Object> getBranchByPK(@PathVariable(value="branchId") Integer branchId){
 		StringBuffer str = new StringBuffer("select * from tbl_library_branch where branchId = ?");
 		try {
@@ -93,12 +88,12 @@ public class BranchService {
 	}
 	
 	@Transactional
-	@RequestMapping(value="/branches/{branchId}",method=RequestMethod.PUT,consumes="application/json",produces="application/json")
+	@RequestMapping(value="/branches/{branchId}",method=RequestMethod.PUT)
 	public ResponseEntity<Object> updateBranch(@RequestBody Branch branch, @PathVariable(value="branchId") Integer branchId){
 		try {
 			brdao.updateBranch(branch);
 			HttpHeaders headers = new HttpHeaders();
-			headers.setLocation(URI.create(url+"/branches/"+branchId));
+			headers.setLocation(URI.create("/branches/"+branchId));
 			return new ResponseEntity<Object>(headers,HttpStatus.OK);
 		} catch (Exception e) {
 			e.printStackTrace();
